@@ -15,7 +15,6 @@
 				<a href="/status" class="pl-4">Status</a>
 				<a href="/plan" class="pl-4">Plan</a>
 				<a href="/projects" class="pl-4">Projects</a>
-				<a href="/skills" class="pl-4">Skills</a>
 				<a href="/employment" class="pl-4">Employment</a>
 			</nav>
 		</div>
