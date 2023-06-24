@@ -6,6 +6,14 @@ const notion = new Client({
 	auth: NOTION_TOKEN
 });
 
+export async function searchPage(title: string) {
+	const response = await notion.search({ query: title }).catch((err) => {
+		console.error(err);
+	});
+
+	return response;
+}
+
 export async function fetchPage(pageId: string) {
 	const response = await notion.pages.retrieve({ page_id: pageId }).catch((err) => {
 		console.error(err);
