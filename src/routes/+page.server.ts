@@ -1,17 +1,12 @@
 import posts from '../data';
-import {Client} from '@notionhq/client';
-import { env } from '$env/dynamic/private';
+import { fetchChildBlocks, fetchPage } from '../lib/notion-client';
 
 export async function load() {
-	const NOTION_TOKEN = env.NOTION_TOKEN;
-	const notion = new Client({
-	    auth: NOTION_TOKEN,
-	});
+	const page = await fetchPage('106e4b9e1f504d588348d4e4ded6ffc4');
+	console.log('Got response:', page);
 
-	const response =
-		await notion.users.list({});
-
-	console.log("Got response:", response);
+	const blocks = await fetchChildBlocks('106e4b9e1f504d588348d4e4ded6ffc4');
+	console.log('Got response:', blocks);
 
 	return {
 		testdata: posts.map((post) => ({
