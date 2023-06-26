@@ -1,4 +1,7 @@
 <script>
+	/**
+	 * @type {{ title: any; blocks: any; }}
+	 */
 	export let data;
 </script>
 
