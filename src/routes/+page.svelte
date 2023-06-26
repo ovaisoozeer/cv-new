@@ -1,14 +1,15 @@
 <script>
+	import { HtmlTag } from 'svelte/internal';
 	export let data;
-	// console.log('in page: ', data.blocks);
 </script>
 
-<h1 class="text-3xl font-bold underline">home page content</h1>
+<h1 class="text-3xl font-bold underline">{data.title}</h1>
 
-<ul>
-	<!-- {#each data.blocks as block}
-		{#if block.type == 'child_page'}
-			<p><a href="/{block.id}" />{block.text}</p>
-		{/if}
-	{/each} -->
-</ul>
+{#each data.blocks as block}
+	{#if block.type === 'h2'}
+		<h2 class="text-2xl">{block.content}</h2>
+	{/if}
+	{#if block.type === 'p'}
+		<p class="text-base">{block.content}</p>
+	{/if}
+{/each}

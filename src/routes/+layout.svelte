@@ -12,9 +12,10 @@
 		<div class="basis-1/2 text-justify text-xl">
 			<nav>
 				<a href="/" class="pl-4">Home</a>
-				<a href="/status" class="pl-4">Status</a>
-				<a href="/plan" class="pl-4">Plan</a>
-				<a href="/projects" class="pl-4">Projects</a>
+				<a href="/now" class="pl-4">Now</a>
+				<a href="/next" class="pl-4">Next</a>
+				<a href="/education" class="pl-4">Education</a>
+				<a href="/skills" class="pl-4">Skills</a>
 				<a href="/employment" class="pl-4">Employment</a>
 			</nav>
 		</div>
