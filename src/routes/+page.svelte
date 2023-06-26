@@ -1,15 +1,15 @@
 <script>
-	import { HtmlTag } from 'svelte/internal';
 	export let data;
 </script>
 
 <h1 class="text-3xl font-bold underline">{data.title}</h1>
 
 {#each data.blocks as block}
-	{#if block.type === 'h2'}
-		<h2 class="text-2xl">{block.content}</h2>
-	{/if}
-	{#if block.type === 'p'}
-		<p class="text-base">{block.content}</p>
+	{#if block.blockType === 'h1'}
+		<h2 class="text-3xl">{block.text}</h2>
+	{:else if block.blockType === 'h2'}
+		<h2 class="text-2xl">{block.text}</h2>
+	{:else if block.blockType === 'p'}
+		<p class="text-base">{block.text}</p>
 	{/if}
 {/each}
