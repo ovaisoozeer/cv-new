@@ -7,7 +7,8 @@ import type {
 	Heading2BlockObjectResponse,
 	ParagraphBlockObjectResponse,
 	Heading1BlockObjectResponse,
-	Heading3BlockObjectResponse
+	Heading3BlockObjectResponse,
+	BulletedListItemBlockObjectResponse
 } from '@notionhq/client/build/src/api-endpoints';
 import { BlockElement } from './block_element';
 
@@ -35,7 +36,7 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 	const page = await searchPage(title);
 	const blocks = await getRichTextBlocks(page.results[0].id);
 
-	// console.log('blocks', blocks);
+	console.log('blocks', blocks);
 
 	// using flatMap here to omit elements we don't explicitly want.
 	const blockElements = blocks.results.flatMap((block) => {
@@ -62,6 +63,13 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 				paragraph.blockType = 'p';
 				paragraph.text = (block as ParagraphBlockObjectResponse).paragraph.rich_text[0].plain_text;
 				return [paragraph];
+			case 'bulleted_list_item':
+				let bullet = new BlockElement();
+				bullet.blockType = 'bullet';
+				bullet.text = (
+					block as BulletedListItemBlockObjectResponse
+				).bulleted_list_item.rich_text[0].plain_text;
+				return [bullet];
 			default:
 				let empty = new BlockElement();
 				empty.blockType = 'br';
