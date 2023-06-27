@@ -17,6 +17,6 @@
 	{:else if block.blockType === 'br'}
 		<br />
 	{:else if block.blockType === 'bullet'}
-		<ul class="list-disc pl-4"><li>{block.text}</li></ul>
+		<ul class="list-disc pl-4 pt-1"><li>{block.text}</li></ul>
 	{/if}
 {/each}
