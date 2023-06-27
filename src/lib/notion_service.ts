@@ -6,7 +6,8 @@ import type {
 	SearchResponse,
 	Heading2BlockObjectResponse,
 	ParagraphBlockObjectResponse,
-	Heading1BlockObjectResponse
+	Heading1BlockObjectResponse,
+	Heading3BlockObjectResponse
 } from '@notionhq/client/build/src/api-endpoints';
 import { BlockElement } from './block_element';
 
@@ -30,17 +31,17 @@ export async function getRichTextBlocks(blockId: string): Promise<ListBlockChild
 	});
 }
 
-export async function getPageData(pageId: string): Promise<Array<BlockElement>> {
-	const page = await searchPage(pageId);
+export async function getPageData(title: string): Promise<Array<BlockElement>> {
+	const page = await searchPage(title);
 	const blocks = await getRichTextBlocks(page.results[0].id);
 
-	console.log('BLOCKS', blocks);
+	// console.log('blocks', blocks);
 
+	// using flatMap here to omit elements we don't explicitly want.
 	const blockElements = blocks.results.flatMap((block) => {
 		switch (
-			block.type //TODO: make typesafe
+			block.type // TODO: make typesafe
 		) {
-			//TODO: handle multiple rich text children
 			case 'heading_1':
 				let heading1 = new BlockElement();
 				heading1.blockType = 'h1';
@@ -51,13 +52,21 @@ export async function getPageData(pageId: string): Promise<Array<BlockElement>> 
 				heading2.blockType = 'h2';
 				heading2.text = (block as Heading2BlockObjectResponse).heading_2.rich_text[0].plain_text;
 				return [heading2];
+			case 'heading_3':
+				let heading3 = new BlockElement();
+				heading3.blockType = 'h3';
+				heading3.text = (block as Heading3BlockObjectResponse).heading_3.rich_text[0].plain_text;
+				return [heading3];
 			case 'paragraph':
 				let paragraph = new BlockElement();
-				paragraph.blockType = 'h2';
+				paragraph.blockType = 'p';
 				paragraph.text = (block as ParagraphBlockObjectResponse).paragraph.rich_text[0].plain_text;
 				return [paragraph];
 			default:
-				return []; //using flatMap here to omit elements we don't explicitly want.
+				let empty = new BlockElement();
+				empty.blockType = 'br';
+				empty.text = '';
+				return [];
 		}
 	});
 

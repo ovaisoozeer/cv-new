@@ -4,7 +4,7 @@ export async function load() {
 	let blockElements = await getPageData('home');
 
 	return {
-		title: 'home',
+		title: 'Home',
 		blocks: structuredClone(blockElements) //sveltekit does not like types (!)
 	};
 }

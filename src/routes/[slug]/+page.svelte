@@ -1,7 +1,7 @@
 <script>
-	import DynamicPage from '../DynamicPage.svelte';
+	import RichTextBlocks from '../RichTextBlocks.svelte';
 
 	export let data;
 </script>
 
-<DynamicPage {data} />
+<RichTextBlocks {data} />
