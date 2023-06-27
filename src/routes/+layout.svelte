@@ -77,9 +77,7 @@
 		</div>
 	</nav>
 
-	<div>
-		<slot />
-	</div>
+	<slot />
 </div>
 
 <style lang="postcss">
