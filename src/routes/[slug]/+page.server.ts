@@ -28,13 +28,13 @@ const testData = {
 };
 
 export async function load({ params }) {
-	let pageTitle = params.slug;
+	const pageTitle = params.slug;
 
 	if (pageTitle === 'test-data') {
 		return testData;
 	}
 
-	let blockElements = await getPageData(pageTitle);
+	const blockElements = await getPageData(pageTitle);
 
 	return {
 		title: capitalizeFirstLetter(pageTitle),
