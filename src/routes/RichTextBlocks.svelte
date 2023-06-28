@@ -1,6 +1,6 @@
 <script>
 	/**
-	 * @type {{ title: any; blocks: any; }}
+	 * @type {{ blocks: any; }}
 	 */
 	export let data;
 </script>
