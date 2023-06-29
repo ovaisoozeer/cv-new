@@ -1,13 +1,9 @@
+import getPageBlocks from '$lib/page_client';
+
 export const ssr = false;
 
 export async function load({ params }) {
-	const pageTitle = params.slug;
-
-	const resp = await fetch(`/api/page-elements?pageId=${pageTitle}`);
-
-	const blockElements = await resp.json();
-
 	return {
-		blocks: structuredClone(blockElements) //sveltekit does not like types (!)
+		blocks: structuredClone(await getPageBlocks(params.slug)) //sveltekit does not like types (!)
 	};
 }
