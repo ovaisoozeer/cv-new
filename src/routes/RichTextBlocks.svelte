@@ -9,16 +9,16 @@
 
 {#each data.blocks as block}
 	{#if block.blockType === BlockType.title}
-		<h1 class="text-2xl pt-8">{block.text}</h1>
+		<h1 class="text-2xl pt-8">{block.plain_text}</h1>
 	{:else if block.blockType === BlockType.section}
-		<h2 class="text-xl pt-6">{block.text}</h2>
+		<h2 class="text-xl pt-6">{block.plain_text}</h2>
 	{:else if block.blockType === BlockType.subsection}
-		<h3 class="text-xl pt-5">{block.text}</h3>
+		<h3 class="text-xl pt-5">{block.plain_text}</h3>
 	{:else if block.blockType === BlockType.paragraph}
-		<p class="text-base pt-4">{block.text}</p>
+		<p class="text-base pt-4">{block.plain_text}</p>
 	{:else if block.blockType === BlockType.break}
 		<br />
 	{:else if block.blockType === BlockType.bullet}
-		<ul class="list-disc pl-4 pt-1"><li>{block.text}</li></ul>
+		<ul class="list-disc pl-4 pt-1"><li>{block.plain_text}</li></ul>
 	{/if}
 {/each}
