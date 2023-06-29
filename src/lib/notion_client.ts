@@ -10,7 +10,7 @@ import type {
 	Heading3BlockObjectResponse,
 	BulletedListItemBlockObjectResponse
 } from '@notionhq/client/build/src/api-endpoints';
-import { BlockElement } from './block_element';
+import { BlockElement, BlockType } from './block_element';
 
 const NOTION_TOKEN = env.NOTION_TOKEN;
 const notion = new Client({
@@ -43,38 +43,44 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 		switch (
 			block.type // TODO: make typesafe
 		) {
-			case 'heading_1':
-				let heading1 = new BlockElement();
-				heading1.blockType = 'h1';
+			case 'heading_1': {
+				const heading1 = new BlockElement();
+				heading1.blockType = BlockType.title;
 				heading1.text = (block as Heading1BlockObjectResponse).heading_1.rich_text[0].plain_text;
 				return [heading1];
-			case 'heading_2':
-				let heading2 = new BlockElement();
-				heading2.blockType = 'h2';
+			}
+			case 'heading_2': {
+				const heading2 = new BlockElement();
+				heading2.blockType = BlockType.section;
 				heading2.text = (block as Heading2BlockObjectResponse).heading_2.rich_text[0].plain_text;
 				return [heading2];
-			case 'heading_3':
-				let heading3 = new BlockElement();
-				heading3.blockType = 'h3';
+			}
+			case 'heading_3': {
+				const heading3 = new BlockElement();
+				heading3.blockType = BlockType.subsection;
 				heading3.text = (block as Heading3BlockObjectResponse).heading_3.rich_text[0].plain_text;
 				return [heading3];
-			case 'paragraph':
-				let paragraph = new BlockElement();
-				paragraph.blockType = 'p';
+			}
+			case 'paragraph': {
+				const paragraph = new BlockElement();
+				paragraph.blockType = BlockType.paragraph;
 				paragraph.text = (block as ParagraphBlockObjectResponse).paragraph.rich_text[0].plain_text;
 				return [paragraph];
-			case 'bulleted_list_item':
-				let bullet = new BlockElement();
-				bullet.blockType = 'bullet';
+			}
+			case 'bulleted_list_item': {
+				const bullet = new BlockElement();
+				bullet.blockType = BlockType.bullet;
 				bullet.text = (
 					block as BulletedListItemBlockObjectResponse
 				).bulleted_list_item.rich_text[0].plain_text;
 				return [bullet];
-			default:
-				let empty = new BlockElement();
-				empty.blockType = 'br';
+			}
+			default: {
+				const empty = new BlockElement();
+				empty.blockType = BlockType.break;
 				empty.text = '';
 				return [];
+			}
 		}
 	});
 
