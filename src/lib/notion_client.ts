@@ -8,10 +8,10 @@ import type {
 	ParagraphBlockObjectResponse,
 	Heading1BlockObjectResponse,
 	Heading3BlockObjectResponse,
-	BulletedListItemBlockObjectResponse
+	BulletedListItemBlockObjectResponse,
+	RichTextItemResponse
 } from '@notionhq/client/build/src/api-endpoints';
 import { BlockElement, BlockType } from './block_element';
-import { object_without_properties } from 'svelte/internal';
 
 const NOTION_TOKEN = env.NOTION_TOKEN;
 const notion = new Client({
@@ -37,7 +37,7 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 	const page = await searchPage(title);
 	const blocks = await getRichTextBlocks(page.results[0].id);
 
-	console.log('blocks', blocks);
+	// console.log('blocks', blocks);
 
 	// using flatMap here to omit elements we don't explicitly want.
 	const blockElements = blocks.results.flatMap((block) => {
@@ -48,7 +48,6 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 				const heading1 = new BlockElement();
 				heading1.blockType = BlockType.title;
 				Object.assign(heading1, (block as Heading1BlockObjectResponse).heading_1.rich_text[0]);
-				console.log('asd', heading1);
 				return [heading1];
 			}
 			case 'heading_2': {
@@ -64,9 +63,31 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 				return [heading3];
 			}
 			case 'paragraph': {
+				//this is leaking presentation code, but it's not a terrible compromise to get accessible code ¯\_(ツ)_/¯
 				const paragraph = new BlockElement();
 				paragraph.blockType = BlockType.paragraph;
-				Object.assign(paragraph, (block as ParagraphBlockObjectResponse).paragraph.rich_text[0]);
+				const richTextBlocks = (block as ParagraphBlockObjectResponse).paragraph.rich_text;
+				let innerHtml = '';
+				richTextBlocks.forEach((richTextItem: RichTextItemResponse) => {
+					innerHtml += '<span class="';
+					//handle annotations
+					if (richTextItem.annotations.bold) {
+						innerHtml += ' font-bold';
+					}
+					if (richTextItem.annotations.italic) {
+						innerHtml += ' italic';
+					}
+					if (richTextItem.annotations.underline) {
+						innerHtml += ' underline';
+					}
+					if (richTextItem.annotations.strikethrough) {
+						innerHtml += ' line-through';
+					}
+					innerHtml += '">';
+					innerHtml += richTextItem.plain_text;
+					innerHtml += '</span>';
+				});
+				paragraph.innerHtml = innerHtml;
 				return [paragraph];
 			}
 			case 'bulleted_list_item': {

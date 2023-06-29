@@ -1,12 +1,15 @@
 export class BlockElement {
 	blockType?: BlockType;
 	plain_text?: string;
-	isBold?: boolean;
-	isItalic?: boolean;
-	isUnderline?: boolean;
-	isStrikethrough?: boolean;
-	isCode?: boolean;
-	color?: string;
+	annotations?: {
+		bold?: boolean;
+		italic?: boolean;
+		strikethrough?: boolean;
+		underline?: boolean;
+		// code?: boolean; // Unsupported
+		// color?: string; // Unsupported
+	};
+	innerHtml?: string;
 }
 
 export enum BlockType {

@@ -2,7 +2,7 @@
 	import { BlockElement, BlockType } from '$lib/block_element';
 
 	/**
-	 * @type {{ blocks: any; }}
+	 * @type {{ blocks: Array<BlockElement>; }}
 	 */
 	export let data;
 </script>
@@ -15,7 +15,7 @@
 	{:else if block.blockType === BlockType.subsection}
 		<h3 class="text-xl pt-5">{block.plain_text}</h3>
 	{:else if block.blockType === BlockType.paragraph}
-		<p class="text-base pt-4">{block.plain_text}</p>
+		<p class="text-base pt-4">{@html block.innerHtml}</p>
 	{:else if block.blockType === BlockType.break}
 		<br />
 	{:else if block.blockType === BlockType.bullet}
