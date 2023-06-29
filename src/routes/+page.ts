@@ -1,9 +1,7 @@
 export const ssr = false;
 
-export async function load({ params }) {
-	const pageTitle = params.slug;
-
-	const resp = await fetch(`/api/page-elements?pageId=${pageTitle}`);
+export async function load() {
+	const resp = await fetch(`/api/page-elements?pageId=home`);
 
 	const blockElements = await resp.json();
 
