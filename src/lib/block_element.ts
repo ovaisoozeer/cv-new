@@ -1,6 +1,7 @@
 export class BlockElement {
-	blockType?: BlockType;
-	innerHtml?: string;
+	blockType!: BlockType;
+	richTextHtmlString?: string;
+	imageUrl?: string;
 }
 
 export enum BlockType {
@@ -9,5 +10,6 @@ export enum BlockType {
 	subsection,
 	paragraph,
 	break,
-	bullet
+	bullet,
+	image
 }

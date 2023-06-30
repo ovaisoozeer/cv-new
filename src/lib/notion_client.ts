@@ -9,7 +9,8 @@ import type {
 	Heading1BlockObjectResponse,
 	Heading3BlockObjectResponse,
 	BulletedListItemBlockObjectResponse,
-	RichTextItemResponse
+	RichTextItemResponse,
+	ImageBlockObjectResponse
 } from '@notionhq/client/build/src/api-endpoints';
 import { BlockElement, BlockType } from './block_element';
 
@@ -47,7 +48,7 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 			case 'heading_1': {
 				const heading1 = new BlockElement();
 				heading1.blockType = BlockType.title;
-				heading1.innerHtml = getRichTextHtmlString(
+				heading1.richTextHtmlString = getRichTextHtmlString(
 					(block as Heading1BlockObjectResponse).heading_1.rich_text
 				);
 				return [heading1];
@@ -55,7 +56,7 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 			case 'heading_2': {
 				const heading2 = new BlockElement();
 				heading2.blockType = BlockType.section;
-				heading2.innerHtml = getRichTextHtmlString(
+				heading2.richTextHtmlString = getRichTextHtmlString(
 					(block as Heading2BlockObjectResponse).heading_2.rich_text
 				);
 				return [heading2];
@@ -63,16 +64,15 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 			case 'heading_3': {
 				const heading3 = new BlockElement();
 				heading3.blockType = BlockType.subsection;
-				heading3.innerHtml = getRichTextHtmlString(
+				heading3.richTextHtmlString = getRichTextHtmlString(
 					(block as Heading3BlockObjectResponse).heading_3.rich_text
 				);
 				return [heading3];
 			}
 			case 'paragraph': {
-				//this is leaking presentation code, but it's not a terrible compromise to get accessible code ¯\_(ツ)_/¯
 				const paragraph = new BlockElement();
 				paragraph.blockType = BlockType.paragraph;
-				paragraph.innerHtml = getRichTextHtmlString(
+				paragraph.richTextHtmlString = getRichTextHtmlString(
 					(block as ParagraphBlockObjectResponse).paragraph.rich_text
 				);
 				return [paragraph];
@@ -80,10 +80,28 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 			case 'bulleted_list_item': {
 				const bullet = new BlockElement();
 				bullet.blockType = BlockType.bullet;
-				bullet.innerHtml = getRichTextHtmlString(
+				bullet.richTextHtmlString = getRichTextHtmlString(
 					(block as BulletedListItemBlockObjectResponse).bulleted_list_item.rich_text
 				);
 				return [bullet];
+			}
+			case 'image': {
+				// TODO: figure out alt-text
+				console.log('the IMG', block);
+				const image = new BlockElement();
+				image.blockType = BlockType.image;
+				const fileblock = (block as ImageBlockObjectResponse).image;
+				switch (fileblock.type) {
+					case 'file': {
+						image.imageUrl = fileblock.file.url;
+						break;
+					}
+					case 'external': {
+						image.imageUrl = fileblock.external.url;
+						break;
+					}
+				}
+				return [image];
 			}
 			default: {
 				const empty = new BlockElement();
@@ -98,6 +116,7 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 	return blockElements;
 }
 
+// this is leaking presentation code, but it's not a terrible compromise to get accessible code ¯\_(ツ)_/¯
 function getRichTextHtmlString(richTextBlocks: RichTextItemResponse[]) {
 	let innerHtml = '';
 	richTextBlocks.forEach((richTextItem: RichTextItemResponse) => {
