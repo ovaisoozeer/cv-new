@@ -12,7 +12,8 @@ import type {
 	RichTextItemResponse,
 	ImageBlockObjectResponse
 } from '@notionhq/client/build/src/api-endpoints';
-import { BlockElement, BlockType } from './block_element';
+import { BlockElement, BlockType } from './display_types/block_element';
+import { ProjectRow } from './display_types/project_row';
 
 const NOTION_TOKEN = env.NOTION_TOKEN;
 const notion = new Client({
@@ -23,15 +24,33 @@ export async function searchPage(title: string): Promise<SearchResponse> {
 	return await notion.search({ query: title });
 }
 
-export async function fetchPage(pageId: string): Promise<GetPageResponse> {
-	return await notion.pages.retrieve({ page_id: pageId });
-}
-
 export async function getRichTextBlocks(blockId: string): Promise<ListBlockChildrenResponse> {
 	return await notion.blocks.children.list({
 		block_id: blockId,
 		page_size: 100
 	});
+}
+
+export async function getDatabasePages(dbId: string): Promise<Array<ProjectRow>> {
+	const rows = await notion.databases.query({
+		database_id: dbId
+	});
+
+	const projectRows = rows.results.flatMap((row) => {
+		const rowResult = new ProjectRow();
+		rowResult.Role = getRichTextHtmlString(row.properties.Role.rich_text as RichTextItemResponse[]);
+		rowResult.Client = getRichTextHtmlString(
+			row.properties.Client.rich_text as RichTextItemResponse[]
+		);
+		rowResult.Achievement = getRichTextHtmlString(
+			row.properties['Key achievement/Learning'].rich_text as RichTextItemResponse[]
+		);
+		rowResult.Description = getRichTextHtmlString(
+			row.properties['Project description'].title as RichTextItemResponse[]
+		);
+		return rowResult;
+	});
+	return projectRows;
 }
 
 export async function getPageData(title: string): Promise<Array<BlockElement>> {

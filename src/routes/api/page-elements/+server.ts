@@ -1,4 +1,4 @@
-import { getPageData } from '$lib/notion_client';
+import { getPageData } from '$lib/notion_client_wrapper';
 import { json } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 

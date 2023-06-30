@@ -1,4 +1,4 @@
-import getPageBlocks from '$lib/page_client';
+import { getPageBlocks } from '$lib/page_data_helpers';
 
 export const ssr = false;
 

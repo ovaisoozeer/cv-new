@@ -1,5 +1,5 @@
 <script>
-	import { BlockElement, BlockType } from '$lib/block_element';
+	import { BlockElement, BlockType } from '$lib/display_types/block_element';
 
 	/**
 	 * @type {{ blocks: Array<BlockElement>; }}
