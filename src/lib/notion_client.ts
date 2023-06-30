@@ -87,7 +87,6 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 			}
 			case 'image': {
 				// TODO: figure out alt-text
-				console.log('the IMG', block);
 				const image = new BlockElement();
 				image.blockType = BlockType.image;
 				const fileblock = (block as ImageBlockObjectResponse).image;
