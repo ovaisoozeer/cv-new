@@ -9,6 +9,6 @@ export async function getPageBlocks(pageId: string): Promise<Array<BlockElement>
 
 export async function getProjectRows(dbId: string): Promise<Array<ProjectRow>> {
 	const resp = await fetch(`/api/project-db?dbId=${dbId}`);
-	const rows = await resp.json();
+	const rows = resp.json();
 	return rows;
 }

@@ -4,19 +4,24 @@
 	export let data;
 </script>
 
-<table>
-	<tr>
-		<th>Solution</th>
-		<th>Role</th>
-		<th>Client</th>
-		<th>Experience</th>
-	</tr>
-	{#each data.rows as row}
+<table class="table-auto border-solid border-spacing-0">
+	<caption class="caption-top">Projects (outside NDA)</caption>
+	<thead class="">
 		<tr>
-			<td>{@html row.Description}</td>
-			<td>{@html row.Role}</td>
-			<td>{@html row.Client}</td>
-			<td>{@html row.Achievement}</td>
+			<th class="border-2">Solution</th>
+			<th class="border-2">Role</th>
+			<th class="border-2">Client</th>
+			<th class="border-2">Experience</th>
 		</tr>
-	{/each}
+	</thead>
+	<tbody>
+		{#each data.rows as row}
+			<tr class="align-text-top">
+				<td class="border-2 p-1">{@html row.Description}</td>
+				<td class="border-2 p-1">{@html row.Role}</td>
+				<td class="border-2 p-1">{@html row.Client}</td>
+				<td class="border-2 p-1">{@html row.Achievement}</td>
+			</tr>
+		{/each}
+	</tbody>
 </table>
