@@ -7,6 +7,6 @@ export async function load() {
 	const data = structuredClone(projectRows.reverse());
 	console.log(data);
 	return {
-		rows: data //svelte does not like types (!)
+		rows: data
 	};
 }
