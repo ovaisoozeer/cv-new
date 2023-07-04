@@ -8,13 +8,9 @@ const MAX_AGE = env.MAX_AGE;
 export async function GET({ url, setHeaders, request }) {
 	const dbId = url.searchParams.get('dbId') || '';
 
-	// setHeaders({
-	// 	'cache-control': 'max-age=' + (MAX_AGE || 300)
-	// });
-
-	// if (pageTitle === 'test-data') {
-	// 	return json(testData);
-	// }
+	setHeaders({
+		'cache-control': 'max-age=' + (MAX_AGE || 300)
+	});
 
 	const rows = await getDatabasePages(dbId);
 	return json(rows);
