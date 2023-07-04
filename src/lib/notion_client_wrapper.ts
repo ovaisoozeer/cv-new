@@ -1,7 +1,6 @@
 import { Client } from '@notionhq/client';
 import { env } from '$env/dynamic/private';
 import type {
-	GetPageResponse,
 	ListBlockChildrenResponse,
 	SearchResponse,
 	Heading2BlockObjectResponse,
@@ -10,7 +9,8 @@ import type {
 	Heading3BlockObjectResponse,
 	BulletedListItemBlockObjectResponse,
 	RichTextItemResponse,
-	ImageBlockObjectResponse
+	ImageBlockObjectResponse,
+	PageObjectResponse
 } from '@notionhq/client/build/src/api-endpoints';
 import { BlockElement, BlockType } from './display_types/block_element';
 import { ProjectRow } from './display_types/project_row';
@@ -31,22 +31,28 @@ export async function getRichTextBlocks(blockId: string): Promise<ListBlockChild
 	});
 }
 
-export async function getDatabasePages(dbId: string): Promise<Array<ProjectRow>> {
+export async function getProjectDb(): Promise<Array<ProjectRow>> {
 	const rows = await notion.databases.query({
-		database_id: dbId
+		database_id: '0e8541767ed14a42a56730e7541ee028'
 	});
 
 	const projectRows = rows.results.flatMap((row) => {
+		if (!(row as PageObjectResponse)) {
+			return [];
+		}
 		const rowResult = new ProjectRow();
-		rowResult.Role = getRichTextHtmlString(row.properties.Role.rich_text as RichTextItemResponse[]);
+		rowResult.Role = getRichTextHtmlString(
+			(row as PageObjectResponse).properties.Role.rich_text as RichTextItemResponse[]
+		);
 		rowResult.Client = getRichTextHtmlString(
-			row.properties.Client.rich_text as RichTextItemResponse[]
+			(row as PageObjectResponse).properties.Client.rich_text as RichTextItemResponse[]
 		);
 		rowResult.Achievement = getRichTextHtmlString(
-			row.properties['Key achievement/Learning'].rich_text as RichTextItemResponse[]
+			(row as PageObjectResponse).properties['Key achievement/Learning']
+				.rich_text as RichTextItemResponse[]
 		);
 		rowResult.Description = getRichTextHtmlString(
-			row.properties['Project description'].title as RichTextItemResponse[]
+			(row as PageObjectResponse).properties['Project description'].title as RichTextItemResponse[]
 		);
 		return rowResult;
 	});
