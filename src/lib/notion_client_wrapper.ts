@@ -14,6 +14,7 @@ import type {
 } from '@notionhq/client/build/src/api-endpoints';
 import { BlockElement, BlockType } from './display_types/block_element';
 import { ProjectRow } from './display_types/project_row';
+import getRichTextStyledContent from './rich-text-styled-content';
 
 const NOTION_TOKEN = env.NOTION_TOKEN;
 const notion = new Client({
@@ -41,17 +42,17 @@ export async function getProjectDb(): Promise<Array<ProjectRow>> {
 			return [];
 		}
 		const rowResult = new ProjectRow();
-		rowResult.Role = getRichTextHtmlString(
+		rowResult.Role = getRichTextStyledContent(
 			(row as PageObjectResponse).properties.Role.rich_text as RichTextItemResponse[]
 		);
-		rowResult.Client = getRichTextHtmlString(
+		rowResult.Client = getRichTextStyledContent(
 			(row as PageObjectResponse).properties.Client.rich_text as RichTextItemResponse[]
 		);
-		rowResult.Achievement = getRichTextHtmlString(
+		rowResult.Achievement = getRichTextStyledContent(
 			(row as PageObjectResponse).properties['Key achievement/Learning']
 				.rich_text as RichTextItemResponse[]
 		);
-		rowResult.Description = getRichTextHtmlString(
+		rowResult.Description = getRichTextStyledContent(
 			(row as PageObjectResponse).properties['Project description'].title as RichTextItemResponse[]
 		);
 		return rowResult;
@@ -73,7 +74,7 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 			case 'heading_1': {
 				const heading1 = new BlockElement();
 				heading1.blockType = BlockType.title;
-				heading1.richTextHtmlString = getRichTextHtmlString(
+				heading1.richTextHtmlString = getRichTextStyledContent(
 					(block as Heading1BlockObjectResponse).heading_1.rich_text
 				);
 				return [heading1];
@@ -81,7 +82,7 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 			case 'heading_2': {
 				const heading2 = new BlockElement();
 				heading2.blockType = BlockType.section;
-				heading2.richTextHtmlString = getRichTextHtmlString(
+				heading2.richTextHtmlString = getRichTextStyledContent(
 					(block as Heading2BlockObjectResponse).heading_2.rich_text
 				);
 				return [heading2];
@@ -89,7 +90,7 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 			case 'heading_3': {
 				const heading3 = new BlockElement();
 				heading3.blockType = BlockType.subsection;
-				heading3.richTextHtmlString = getRichTextHtmlString(
+				heading3.richTextHtmlString = getRichTextStyledContent(
 					(block as Heading3BlockObjectResponse).heading_3.rich_text
 				);
 				return [heading3];
@@ -97,7 +98,7 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 			case 'paragraph': {
 				const paragraph = new BlockElement();
 				paragraph.blockType = BlockType.paragraph;
-				paragraph.richTextHtmlString = getRichTextHtmlString(
+				paragraph.richTextHtmlString = getRichTextStyledContent(
 					(block as ParagraphBlockObjectResponse).paragraph.rich_text
 				);
 				return [paragraph];
@@ -105,7 +106,7 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 			case 'bulleted_list_item': {
 				const bullet = new BlockElement();
 				bullet.blockType = BlockType.bullet;
-				bullet.richTextHtmlString = getRichTextHtmlString(
+				bullet.richTextHtmlString = getRichTextStyledContent(
 					(block as BulletedListItemBlockObjectResponse).bulleted_list_item.rich_text
 				);
 				return [bullet];
@@ -138,33 +139,4 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 	// console.log('elements', blockElements);
 
 	return blockElements;
-}
-
-// this is leaking presentation code, but it's not a terrible compromise to get accessible code ¯\_(ツ)_/¯
-function getRichTextHtmlString(richTextBlocks: RichTextItemResponse[]) {
-	let innerHtml = '';
-	richTextBlocks.forEach((richTextItem: RichTextItemResponse) => {
-		if (richTextItem.href) {
-			innerHtml += `<a href="${richTextItem.href}" class="text-blue-600 dark:text-blue-500 hover:underline">${richTextItem.plain_text}</a>`;
-		} else {
-			innerHtml += '<span class="';
-			//handle annotations
-			if (richTextItem.annotations.bold) {
-				innerHtml += ' font-bold';
-			}
-			if (richTextItem.annotations.italic) {
-				innerHtml += ' italic';
-			}
-			if (richTextItem.annotations.underline) {
-				innerHtml += ' underline';
-			}
-			if (richTextItem.annotations.strikethrough) {
-				innerHtml += ' line-through';
-			}
-			innerHtml += '">';
-			innerHtml += richTextItem.plain_text;
-			innerHtml += '</span>';
-		}
-	});
-	return innerHtml;
 }

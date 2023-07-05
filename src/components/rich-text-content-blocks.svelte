@@ -9,11 +9,11 @@
 
 {#each data.blocks as block}
 	{#if block.blockType === BlockType.title}
-		<h1 class="text-2xl pt-8">{@html block.richTextHtmlString}</h1>
+		<h1 class="text-2xl pt-8 font-extrabold">{@html block.richTextHtmlString}</h1>
 	{:else if block.blockType === BlockType.section}
-		<h2 class="text-xl pt-6">{@html block.richTextHtmlString}</h2>
+		<h2 class="text-xl pt-6 font-bold">{@html block.richTextHtmlString}</h2>
 	{:else if block.blockType === BlockType.subsection}
-		<h3 class="text-xl pt-5">{@html block.richTextHtmlString}</h3>
+		<h3 class="text-xl pt-5 font-bold">{@html block.richTextHtmlString}</h3>
 	{:else if block.blockType === BlockType.paragraph}
 		<p class="text-base pt-4">{@html block.richTextHtmlString}</p>
 	{:else if block.blockType === BlockType.break}

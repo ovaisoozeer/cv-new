@@ -1,9 +1,9 @@
-import { getPageBlocks } from '$lib/page_data_helpers';
+import { getPageBlocks } from '$lib/api-helpers';
 
 export const ssr = false;
 
 export async function load() {
 	return {
-		blocks: structuredClone(await getPageBlocks('home')) //sveltekit does not like types (!)
+		blocks: await getPageBlocks('home')
 	};
 }

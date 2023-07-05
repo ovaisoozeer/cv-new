@@ -1,12 +1,10 @@
-import { getProjectRows } from '$lib/page_data_helpers';
+import { getProjectRows } from '$lib/api-helpers';
 
 export const ssr = false;
 
 export async function load() {
 	const projectRows = await getProjectRows();
-	const data = structuredClone(projectRows.reverse());
-	console.log(data);
 	return {
-		rows: data
+		rows: projectRows.reverse()
 	};
 }

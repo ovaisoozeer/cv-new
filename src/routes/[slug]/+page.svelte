@@ -1,7 +1,7 @@
 <script>
-	import RichTextComponent from 'components/rich-text.svelte';
+	import RichTextContentBlocks from 'components/rich-text-content-blocks.svelte';
 
 	export let data;
 </script>
 
-<RichTextComponent {data} />
+<RichTextContentBlocks {data} />
