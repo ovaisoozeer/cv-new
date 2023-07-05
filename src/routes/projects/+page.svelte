@@ -1,10 +1,8 @@
 <script>
-	import { each } from 'svelte/internal';
-
 	export let data;
 </script>
 
-<table class="table-auto border-solid border-spacing-0">
+<table class="table-auto border-solid border-spacing-0 mt-4 mb-4">
 	<caption class="caption-top">Projects (outside NDA)</caption>
 	<thead class="">
 		<tr>
