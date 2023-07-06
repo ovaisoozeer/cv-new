@@ -7,10 +7,13 @@
 <div class="container mx-auto">
 	<nav class="bg-oocreme border-gray-200 dark:bg-oodark">
 		<div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-			<a href="/" class="flex items-center">
-				<span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
-					>Ovais Oozeer</span
-				>
+			<a href="/" class="flex items-left">
+				<img
+					src="https://ovais.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F4f78da29-4e52-4e40-8436-15155e58126c%2FUntitled.png?id=b9bd2a51-cfce-4a16-abbf-d2624ae804c9&table=block&spaceId=ce7b79e2-d861-4232-a118-daea316f3ddf&width=800&userId=&cache=v2"
+					class="mr-3 h-8 sm:h-9"
+					alt="Profile pic"
+				/>
+				<span class="text-2xl font-semibold whitespace-nowrap dark:text-white">Ovais Oozeer</span>
 			</a>
 			<button
 				data-collapse-toggle="navbar-default"
