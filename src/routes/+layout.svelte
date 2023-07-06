@@ -39,16 +39,16 @@
 				>
 					<li>
 						<a
-							href="/current"
+							href="/now"
 							class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-oohighlight md:p-0 dark:text-white md:dark:hover:text-oohighlight dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-							aria-current="page">Profile</a
+							aria-current="page">Now</a
 						>
 					</li>
 					<li>
 						<a
-							href="/seeking"
+							href="/next"
 							class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-oohighlight md:p-0 dark:text-white md:dark:hover:text-oohighlight dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-							>Seeking</a
+							>Next</a
 						>
 					</li>
 					<li>
