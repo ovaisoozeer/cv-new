@@ -9,7 +9,7 @@ export async function GET({ url, setHeaders, request }) {
 	const pageTitle = url.searchParams.get('title') || '';
 
 	setHeaders({
-		'cache-control': 'max-age=' + (MAX_AGE || 300)
+		'cache-control': 'max-age=0, s-maxage=' + (MAX_AGE || 3600)
 	});
 
 	const blockElements = await getPageData(pageTitle);
