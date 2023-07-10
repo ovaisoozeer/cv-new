@@ -10,11 +10,13 @@ import type {
 	BulletedListItemBlockObjectResponse,
 	RichTextItemResponse,
 	ImageBlockObjectResponse,
-	PageObjectResponse
+	PageObjectResponse,
+	QueryDatabaseResponse
 } from '@notionhq/client/build/src/api-endpoints';
 import { BlockElement, BlockType } from './display_types/block_element';
 import { ProjectRow } from './display_types/project_row';
 import getRichTextStyledContent from './rich-text-styled-content';
+import { BlogArticle } from './display_types/blog_article';
 
 const NOTION_TOKEN = env.NOTION_TOKEN;
 const notion = new Client({
@@ -139,4 +141,27 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 	// console.log('elements', blockElements);
 
 	return blockElements;
+}
+
+export async function getArticles(): Promise<Array<BlogArticle>> {
+	const rows = await notion.databases.query({
+		database_id: '5efa1a052a544c24bd1cfa6fb77bf205'
+	});
+	console.log(rows);
+
+	const articles = rows.results.flatMap((row) => {
+		if ((row as PageObjectResponse).properties['Name'].title.length == 0) {
+			return [];
+		}
+		const rowResult = new BlogArticle();
+		console.log(row);
+		rowResult.Title = getRichTextStyledContent(
+			(row as PageObjectResponse).properties['Name'].title
+		);
+		rowResult.TitleText = (row as PageObjectResponse).properties['Name'].title[0].plain_text;
+		return rowResult;
+	});
+
+	console.log(articles);
+	return articles;
 }

@@ -8,7 +8,13 @@ export async function getPageBlocks(title: string): Promise<Array<BlockElement>>
 }
 
 export async function getProjectRows(): Promise<Array<ProjectRow>> {
-	const resp = await fetch(`/api/project-db`);
+	const resp = await fetch('/api/project-db');
+	const rows = resp.json();
+	return rows;
+}
+
+export async function getBlogArticles(): Promise<Array<ProjectRow>> {
+	const resp = await fetch('/api/articles');
 	const rows = resp.json();
 	return rows;
 }
