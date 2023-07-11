@@ -1,10 +1,10 @@
-export class BlockElement {
-	blockType!: BlockType;
+export class RichTextBlock {
+	blockType!: RichTextBlockType;
 	richTextHtmlString?: string;
 	imageUrl?: string;
 }
 
-export enum BlockType {
+export enum RichTextBlockType {
 	title,
 	section,
 	subsection,

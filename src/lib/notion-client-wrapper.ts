@@ -12,10 +12,10 @@ import type {
 	ImageBlockObjectResponse,
 	PageObjectResponse
 } from '@notionhq/client/build/src/api-endpoints';
-import { BlockElement, BlockType } from './display-types/block-element';
+import { RichTextBlock, RichTextBlockType } from './display-types/rich-text-block';
 import { ProjectRow } from './display-types/project-row';
 import getRichTextContent from './rich-text-content';
-import { BlogArticle } from './display-types/blog-article';
+import { ArticleRow } from './display-types/article-row';
 
 const NOTION_TOKEN = env.NOTION_TOKEN;
 const notion = new Client({
@@ -61,7 +61,7 @@ export async function getProjectDb(): Promise<Array<ProjectRow>> {
 	return projectRows;
 }
 
-export async function getPageData(title: string): Promise<Array<BlockElement>> {
+export async function getPageData(title: string): Promise<Array<RichTextBlock>> {
 	const page = await searchPage(title);
 	const blocks = await getRichTextBlocks(page.results[0].id);
 
@@ -73,40 +73,40 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 			block.type // TODO: make typesafe
 		) {
 			case 'heading_1': {
-				const heading1 = new BlockElement();
-				heading1.blockType = BlockType.title;
+				const heading1 = new RichTextBlock();
+				heading1.blockType = RichTextBlockType.title;
 				heading1.richTextHtmlString = getRichTextContent(
 					(block as Heading1BlockObjectResponse).heading_1.rich_text
 				);
 				return [heading1];
 			}
 			case 'heading_2': {
-				const heading2 = new BlockElement();
-				heading2.blockType = BlockType.section;
+				const heading2 = new RichTextBlock();
+				heading2.blockType = RichTextBlockType.section;
 				heading2.richTextHtmlString = getRichTextContent(
 					(block as Heading2BlockObjectResponse).heading_2.rich_text
 				);
 				return [heading2];
 			}
 			case 'heading_3': {
-				const heading3 = new BlockElement();
-				heading3.blockType = BlockType.subsection;
+				const heading3 = new RichTextBlock();
+				heading3.blockType = RichTextBlockType.subsection;
 				heading3.richTextHtmlString = getRichTextContent(
 					(block as Heading3BlockObjectResponse).heading_3.rich_text
 				);
 				return [heading3];
 			}
 			case 'paragraph': {
-				const paragraph = new BlockElement();
-				paragraph.blockType = BlockType.paragraph;
+				const paragraph = new RichTextBlock();
+				paragraph.blockType = RichTextBlockType.paragraph;
 				paragraph.richTextHtmlString = getRichTextContent(
 					(block as ParagraphBlockObjectResponse).paragraph.rich_text
 				);
 				return [paragraph];
 			}
 			case 'bulleted_list_item': {
-				const bullet = new BlockElement();
-				bullet.blockType = BlockType.bullet;
+				const bullet = new RichTextBlock();
+				bullet.blockType = RichTextBlockType.bullet;
 				bullet.richTextHtmlString = getRichTextContent(
 					(block as BulletedListItemBlockObjectResponse).bulleted_list_item.rich_text
 				);
@@ -114,8 +114,8 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 			}
 			case 'image': {
 				// TODO: figure out alt-text
-				const image = new BlockElement();
-				image.blockType = BlockType.image;
+				const image = new RichTextBlock();
+				image.blockType = RichTextBlockType.image;
 				const fileblock = (block as ImageBlockObjectResponse).image;
 				switch (fileblock.type) {
 					case 'file': {
@@ -130,8 +130,8 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 				return [image];
 			}
 			default: {
-				const empty = new BlockElement();
-				empty.blockType = BlockType.break;
+				const empty = new RichTextBlock();
+				empty.blockType = RichTextBlockType.break;
 				return [empty];
 			}
 		}
@@ -142,7 +142,7 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 	return blockElements;
 }
 
-export async function getPublishedArticles(maturity: string): Promise<Array<BlogArticle>> {
+export async function getPublishedArticles(maturity: string): Promise<Array<ArticleRow>> {
 	console.log(maturity);
 	const rows = await notion.databases.query({
 		database_id: '5efa1a052a544c24bd1cfa6fb77bf205',
@@ -169,7 +169,7 @@ export async function getPublishedArticles(maturity: string): Promise<Array<Blog
 		if ((row as PageObjectResponse).properties['Name'].title.length == 0) {
 			return [];
 		}
-		const rowResult = new BlogArticle();
+		const rowResult = new ArticleRow();
 		console.log(row);
 		rowResult.Title = getRichTextContent((row as PageObjectResponse).properties['Name'].title);
 		rowResult.TitleText = (row as PageObjectResponse).properties['Name'].title[0].plain_text;

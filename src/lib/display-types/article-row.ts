@@ -1,4 +1,4 @@
-export class BlogArticle {
+export class ArticleRow {
 	Title?: string;
 	TitleText?: string;
 }

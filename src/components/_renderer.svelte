@@ -1,27 +1,27 @@
 <script>
-	import { BlockElement, BlockType } from '$lib/display-types/block-element';
+	import { RichTextBlock, RichTextBlockType } from '$lib/display-types/rich-text-block';
 	import ListItem from './list-item.svelte';
 
 	/**
-	 * @type {{ blocks: Array<BlockElement>; }}
+	 * @type {{ blocks: Array<RichTextBlock>; }}
 	 */
 	export let data;
 </script>
 
 {#each data.blocks as block}
-	{#if block.blockType === BlockType.title}
+	{#if block.blockType === RichTextBlockType.title}
 		<h1 class="text-2xl pt-8 font-extrabold">{@html block.richTextHtmlString}</h1>
-	{:else if block.blockType === BlockType.section}
+	{:else if block.blockType === RichTextBlockType.section}
 		<h2 class="text-xl pt-6 font-bold">{@html block.richTextHtmlString}</h2>
-	{:else if block.blockType === BlockType.subsection}
+	{:else if block.blockType === RichTextBlockType.subsection}
 		<h3 class="text-xl pt-5 font-bold">{@html block.richTextHtmlString}</h3>
-	{:else if block.blockType === BlockType.paragraph}
+	{:else if block.blockType === RichTextBlockType.paragraph}
 		<p class="text-base pt-4">{@html block.richTextHtmlString}</p>
-	{:else if block.blockType === BlockType.break}
+	{:else if block.blockType === RichTextBlockType.break}
 		<br />
-	{:else if block.blockType === BlockType.bullet}
+	{:else if block.blockType === RichTextBlockType.bullet}
 		<ListItem content={block.richTextHtmlString} />
-	{:else if block.blockType === BlockType.image}
+	{:else if block.blockType === RichTextBlockType.image}
 		<img src={block.imageUrl} alt="Sorry, Notion does not support alt-text" class="mx-auto" />
 	{/if}
 {/each}
