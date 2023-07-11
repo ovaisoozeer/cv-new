@@ -10,13 +10,12 @@ import type {
 	BulletedListItemBlockObjectResponse,
 	RichTextItemResponse,
 	ImageBlockObjectResponse,
-	PageObjectResponse,
-	QueryDatabaseResponse
+	PageObjectResponse
 } from '@notionhq/client/build/src/api-endpoints';
-import { BlockElement, BlockType } from './display_types/block_element';
-import { ProjectRow } from './display_types/project_row';
-import getRichTextStyledContent from './rich-text-styled-content';
-import { BlogArticle } from './display_types/blog_article';
+import { BlockElement, BlockType } from './display-types/block-element';
+import { ProjectRow } from './display-types/project-row';
+import getRichTextContent from './rich-text-content';
+import { BlogArticle } from './display-types/blog-article';
 
 const NOTION_TOKEN = env.NOTION_TOKEN;
 const notion = new Client({
@@ -44,17 +43,17 @@ export async function getProjectDb(): Promise<Array<ProjectRow>> {
 			return [];
 		}
 		const rowResult = new ProjectRow();
-		rowResult.Role = getRichTextStyledContent(
+		rowResult.Role = getRichTextContent(
 			(row as PageObjectResponse).properties.Role.rich_text as RichTextItemResponse[]
 		);
-		rowResult.Client = getRichTextStyledContent(
+		rowResult.Client = getRichTextContent(
 			(row as PageObjectResponse).properties.Client.rich_text as RichTextItemResponse[]
 		);
-		rowResult.Achievement = getRichTextStyledContent(
+		rowResult.Achievement = getRichTextContent(
 			(row as PageObjectResponse).properties['Key achievement/Learning']
 				.rich_text as RichTextItemResponse[]
 		);
-		rowResult.Description = getRichTextStyledContent(
+		rowResult.Description = getRichTextContent(
 			(row as PageObjectResponse).properties['Project description'].title as RichTextItemResponse[]
 		);
 		return rowResult;
@@ -76,7 +75,7 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 			case 'heading_1': {
 				const heading1 = new BlockElement();
 				heading1.blockType = BlockType.title;
-				heading1.richTextHtmlString = getRichTextStyledContent(
+				heading1.richTextHtmlString = getRichTextContent(
 					(block as Heading1BlockObjectResponse).heading_1.rich_text
 				);
 				return [heading1];
@@ -84,7 +83,7 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 			case 'heading_2': {
 				const heading2 = new BlockElement();
 				heading2.blockType = BlockType.section;
-				heading2.richTextHtmlString = getRichTextStyledContent(
+				heading2.richTextHtmlString = getRichTextContent(
 					(block as Heading2BlockObjectResponse).heading_2.rich_text
 				);
 				return [heading2];
@@ -92,7 +91,7 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 			case 'heading_3': {
 				const heading3 = new BlockElement();
 				heading3.blockType = BlockType.subsection;
-				heading3.richTextHtmlString = getRichTextStyledContent(
+				heading3.richTextHtmlString = getRichTextContent(
 					(block as Heading3BlockObjectResponse).heading_3.rich_text
 				);
 				return [heading3];
@@ -100,7 +99,7 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 			case 'paragraph': {
 				const paragraph = new BlockElement();
 				paragraph.blockType = BlockType.paragraph;
-				paragraph.richTextHtmlString = getRichTextStyledContent(
+				paragraph.richTextHtmlString = getRichTextContent(
 					(block as ParagraphBlockObjectResponse).paragraph.rich_text
 				);
 				return [paragraph];
@@ -108,7 +107,7 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 			case 'bulleted_list_item': {
 				const bullet = new BlockElement();
 				bullet.blockType = BlockType.bullet;
-				bullet.richTextHtmlString = getRichTextStyledContent(
+				bullet.richTextHtmlString = getRichTextContent(
 					(block as BulletedListItemBlockObjectResponse).bulleted_list_item.rich_text
 				);
 				return [bullet];
@@ -172,9 +171,7 @@ export async function getPublishedArticles(maturity: string): Promise<Array<Blog
 		}
 		const rowResult = new BlogArticle();
 		console.log(row);
-		rowResult.Title = getRichTextStyledContent(
-			(row as PageObjectResponse).properties['Name'].title
-		);
+		rowResult.Title = getRichTextContent((row as PageObjectResponse).properties['Name'].title);
 		rowResult.TitleText = (row as PageObjectResponse).properties['Name'].title[0].plain_text;
 		return rowResult;
 	});

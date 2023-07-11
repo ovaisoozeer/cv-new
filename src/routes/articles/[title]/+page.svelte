@@ -1,5 +1,5 @@
 <script>
-	import RichTextContentBlocks from 'components/rich-text-content-blocks.svelte';
+	import RichTextContentBlocks from 'components/_renderer.svelte';
 
 	export let data;
 </script>

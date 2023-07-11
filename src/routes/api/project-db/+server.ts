@@ -1,4 +1,4 @@
-import { getProjectDb } from '$lib/notion_client_wrapper';
+import { getProjectDb } from '$lib/notion-client-wrapper';
 import { json } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 

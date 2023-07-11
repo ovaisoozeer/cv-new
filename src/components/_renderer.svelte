@@ -1,5 +1,5 @@
 <script>
-	import { BlockElement, BlockType } from '$lib/display_types/block_element';
+	import { BlockElement, BlockType } from '$lib/display-types/block-element';
 	import ListItem from './list-item.svelte';
 
 	/**

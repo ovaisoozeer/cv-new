@@ -6,7 +6,7 @@ export async function load({ params }) {
 	const blogArticles = await getBlogArticles(params.maturity);
 
 	return {
-		title: params.maturity.toLocaleUpperCase(),
+		title: params.maturity,
 		articles: blogArticles
 	};
 }

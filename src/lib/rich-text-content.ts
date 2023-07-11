@@ -1,6 +1,6 @@
 import type { RichTextItemResponse } from '@notionhq/client/build/src/api-endpoints';
 
-export default function getRichTextStyledContent(richTextBlocks: RichTextItemResponse[]): string {
+export default function getRichTextContent(richTextBlocks: RichTextItemResponse[]): string {
 	let innerHtml = '';
 	richTextBlocks.forEach((richTextItem: RichTextItemResponse) => {
 		if (richTextItem.href) {
