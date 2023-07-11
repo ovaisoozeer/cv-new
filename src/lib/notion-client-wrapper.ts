@@ -21,19 +21,20 @@ const NOTION_TOKEN = env.NOTION_TOKEN;
 const notion = new Client({
 	auth: NOTION_TOKEN
 });
+const blogDatabaseId = '5efa1a052a544c24bd1cfa6fb77bf205';
 
-export async function searchPage(title: string): Promise<SearchResponse> {
+async function searchForPage(title: string): Promise<SearchResponse> {
 	return await notion.search({ query: title });
 }
 
-export async function getRichTextBlocks(blockId: string): Promise<ListBlockChildrenResponse> {
+async function getChildBlocks(blockId: string): Promise<ListBlockChildrenResponse> {
 	return await notion.blocks.children.list({
 		block_id: blockId,
 		page_size: 100
 	});
 }
 
-export async function getProjectDb(): Promise<Array<ProjectRow>> {
+export async function getProjectRows(): Promise<Array<ProjectRow>> {
 	const rows = await notion.databases.query({
 		database_id: '0e8541767ed14a42a56730e7541ee028'
 	});
@@ -61,14 +62,66 @@ export async function getProjectDb(): Promise<Array<ProjectRow>> {
 	return projectRows;
 }
 
-export async function getPageData(title: string): Promise<Array<RichTextBlock>> {
-	const page = await searchPage(title);
-	const blocks = await getRichTextBlocks(page.results[0].id);
+export async function getPageContent(title: string): Promise<Array<RichTextBlock>> {
+	const page = await searchForPage(title);
+	const blocks = await getChildBlocks(page.results[0].id);
+	const blockElements = TranslateToViewModel(blocks);
+	return blockElements;
+}
 
-	// console.log('blocks', blocks);
+export async function getArticleRows(maturity: string): Promise<Array<ArticleRow>> {
+	const rows = await notion.databases.query({
+		database_id: blogDatabaseId,
+		filter: {
+			and: [
+				{
+					property: 'Tags',
+					multi_select: {
+						contains: maturity
+					}
+				},
+				{
+					property: 'Tags',
+					multi_select: {
+						contains: 'published'
+					}
+				}
+			]
+		}
+	});
 
+	const articles = rows.results.flatMap((row) => {
+		if ((row as PageObjectResponse).properties['Name'].title.length == 0) {
+			return [];
+		}
+		const rowResult = new ArticleRow();
+		rowResult.Title = getRichTextContent((row as PageObjectResponse).properties['Name'].title);
+		rowResult.TitleText = (row as PageObjectResponse).properties['Name'].title[0].plain_text;
+		return rowResult;
+	});
+
+	return articles;
+}
+
+export async function getArticleContent(title: string): Promise<Array<RichTextBlock>> {
+	const rows = await notion.databases.query({
+		database_id: blogDatabaseId,
+		filter: {
+			property: 'Tags',
+			title: {
+				contains: title
+			}
+		}
+	});
+	const blocks = await getChildBlocks(rows.results[0].id);
+	const blockElements = TranslateToViewModel(blocks);
+	return blockElements;
+}
+
+function TranslateToViewModel(blocks: ListBlockChildrenResponse) {
 	// using flatMap here to omit elements we don't explicitly want.
-	const blockElements = blocks.results.flatMap((block) => {
+
+	return blocks.results.flatMap((block) => {
 		switch (
 			block.type // TODO: make typesafe
 		) {
@@ -136,46 +189,4 @@ export async function getPageData(title: string): Promise<Array<RichTextBlock>> 
 			}
 		}
 	});
-
-	// console.log('elements', blockElements);
-
-	return blockElements;
-}
-
-export async function getPublishedArticles(maturity: string): Promise<Array<ArticleRow>> {
-	console.log(maturity);
-	const rows = await notion.databases.query({
-		database_id: '5efa1a052a544c24bd1cfa6fb77bf205',
-		filter: {
-			and: [
-				{
-					property: 'Tags',
-					multi_select: {
-						contains: maturity
-					}
-				},
-				{
-					property: 'Tags',
-					multi_select: {
-						contains: 'Published'
-					}
-				}
-			]
-		}
-	});
-	console.log(rows);
-
-	const articles = rows.results.flatMap((row) => {
-		if ((row as PageObjectResponse).properties['Name'].title.length == 0) {
-			return [];
-		}
-		const rowResult = new ArticleRow();
-		console.log(row);
-		rowResult.Title = getRichTextContent((row as PageObjectResponse).properties['Name'].title);
-		rowResult.TitleText = (row as PageObjectResponse).properties['Name'].title[0].plain_text;
-		return rowResult;
-	});
-
-	console.log(articles);
-	return articles;
 }

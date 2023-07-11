@@ -1,5 +1,6 @@
 import type { RichTextBlock } from './display-types/rich-text-block';
 import type { ProjectRow } from './display-types/project-row';
+import type { ArticleRow } from './display-types/article-row';
 
 export async function getPage(title: string): Promise<Array<RichTextBlock>> {
 	const resp = await fetch(`/api/page?title=${title}`);
@@ -13,7 +14,7 @@ export async function getProjectRows(): Promise<Array<ProjectRow>> {
 	return rows;
 }
 
-export async function getArticlesByMaturity(maturity: string): Promise<Array<BlogArticle>> {
+export async function getArticlesByMaturity(maturity: string): Promise<Array<ArticleRow>> {
 	const resp = await fetch(`/api/article-list?maturity=${maturity}`);
 	const rows = resp.json();
 	return rows;

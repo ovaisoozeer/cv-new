@@ -1,4 +1,4 @@
-import { getPageData } from '$lib/notion-client-wrapper';
+import { getArticleContent } from '$lib/notion-client-wrapper';
 import { json } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 
@@ -12,7 +12,7 @@ export async function GET({ url, setHeaders, request }) {
 		'cache-control': 'max-age=0, s-maxage=' + (MAX_AGE || 3600)
 	});
 
-	const blockElements = await getPageData(pageTitle);
+	const blockElements = await getArticleContent(pageTitle);
 
 	return json(blockElements);
 }

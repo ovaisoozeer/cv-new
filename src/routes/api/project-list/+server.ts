@@ -1,4 +1,4 @@
-import { getProjectDb } from '$lib/notion-client-wrapper';
+import { getProjectRows } from '$lib/notion-client-wrapper';
 import { json } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 
@@ -10,6 +10,6 @@ export async function GET({ url, setHeaders, request }) {
 		'cache-control': 'max-age=0, s-maxage=' + (MAX_AGE || 31536000)
 	});
 
-	const rows = await getProjectDb();
+	const rows = await getProjectRows();
 	return json(rows);
 }

@@ -1,4 +1,4 @@
-import { getPublishedArticles } from '$lib/notion-client-wrapper';
+import { getArticleRows } from '$lib/notion-client-wrapper';
 import { json } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 
@@ -10,7 +10,7 @@ export async function GET({ url, setHeaders, request }) {
 		'cache-control': 'max-age=0, s-maxage=' + (MAX_AGE || 3600)
 	});
 	const maturity = url.searchParams.get('maturity') || '';
-	const rows = await getPublishedArticles(maturity);
-	console.log('rows', rows);
+	const rows = await getArticleRows(maturity);
+	// console.log('rows', rows);
 	return json(rows);
 }
