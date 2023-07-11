@@ -143,9 +143,26 @@ export async function getPageData(title: string): Promise<Array<BlockElement>> {
 	return blockElements;
 }
 
-export async function getArticles(): Promise<Array<BlogArticle>> {
+export async function getPublishedArticles(maturity: string): Promise<Array<BlogArticle>> {
+	console.log(maturity);
 	const rows = await notion.databases.query({
-		database_id: '5efa1a052a544c24bd1cfa6fb77bf205'
+		database_id: '5efa1a052a544c24bd1cfa6fb77bf205',
+		filter: {
+			and: [
+				{
+					property: 'Tags',
+					multi_select: {
+						contains: maturity
+					}
+				},
+				{
+					property: 'Tags',
+					multi_select: {
+						contains: 'Published'
+					}
+				}
+			]
+		}
 	});
 	console.log(rows);
 

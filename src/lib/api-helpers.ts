@@ -13,8 +13,8 @@ export async function getProjectRows(): Promise<Array<ProjectRow>> {
 	return rows;
 }
 
-export async function getBlogArticles(): Promise<Array<ProjectRow>> {
-	const resp = await fetch('/api/articles');
+export async function getBlogArticles(maturity: string): Promise<Array<BlogArticle>> {
+	const resp = await fetch(`/api/articles?maturity=${maturity}`);
 	const rows = resp.json();
 	return rows;
 }

@@ -1,5 +1,6 @@
 <script>
 	import { BlockElement, BlockType } from '$lib/display_types/block_element';
+	import ListItem from './list-item.svelte';
 
 	/**
 	 * @type {{ blocks: Array<BlockElement>; }}
@@ -19,7 +20,7 @@
 	{:else if block.blockType === BlockType.break}
 		<br />
 	{:else if block.blockType === BlockType.bullet}
-		<ul class="list-disc pl-4 pt-1"><li>{@html block.richTextHtmlString}</li></ul>
+		<ListItem content={block.richTextHtmlString} />
 	{:else if block.blockType === BlockType.image}
 		<img src={block.imageUrl} alt="Sorry, Notion does not support alt-text" class="mx-auto" />
 	{/if}
