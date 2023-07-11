@@ -1,9 +1,9 @@
-import { getPageBlocks } from '$lib/api-helpers';
+import { getPage } from '$lib/api-helpers';
 
 export const ssr = false;
 
 export async function load() {
 	return {
-		blocks: await getPageBlocks('home')
+		blocks: await getPage('home')
 	};
 }
