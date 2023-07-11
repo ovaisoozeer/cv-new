@@ -1,9 +1,9 @@
-import { getArticlesByMaturity } from '$lib/api-helpers';
+import { getArticleListViewModel } from '$lib/presenters/article-presenter';
 
 export const ssr = false;
 
 export async function load({ params }) {
-	const articles = await getArticlesByMaturity(params.maturity);
+	const articles = await getArticleListViewModel(params.maturity);
 
 	// console.log(articles);
 

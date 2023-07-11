@@ -1,9 +1,9 @@
-import { getPage } from '$lib/api-helpers';
+import { getPageViewModel } from '$lib/presenters/page-presenter';
 
 export const ssr = false;
 
 export async function load() {
 	return {
-		blocks: await getPage('home')
+		blocks: await getPageViewModel('home')
 	};
 }
