@@ -9,7 +9,6 @@ import type {
 export async function getArticleListViewModel(maturity: string): Promise<Array<ArticleRow>> {
 	const resp = await fetch(`/api/article-list?maturity=${maturity}`);
 	const data = await resp.json();
-	console.log(data);
 	const articles = data.results.flatMap((row: PageObjectResponse) => {
 		if (row.properties['Name'].title.length == 0) {
 			return [];

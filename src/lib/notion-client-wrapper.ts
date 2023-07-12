@@ -2,7 +2,6 @@ import { Client } from '@notionhq/client';
 import { env } from '$env/dynamic/private';
 import type {
 	ListBlockChildrenResponse,
-	SearchResponse,
 	RichTextItemResponse,
 	PageObjectResponse,
 	QueryDatabaseResponse
@@ -16,10 +15,6 @@ const notion = new Client({
 });
 const blogDatabaseId = '5efa1a052a544c24bd1cfa6fb77bf205';
 
-async function searchForPage(title: string): Promise<SearchResponse> {
-	return await notion.search({ query: title });
-}
-
 async function getChildBlocks(blockId: string): Promise<ListBlockChildrenResponse> {
 	return await notion.blocks.children.list({
 		block_id: blockId,
@@ -27,39 +22,39 @@ async function getChildBlocks(blockId: string): Promise<ListBlockChildrenRespons
 	});
 }
 
-export async function getProjectRows(): Promise<Array<ProjectRow>> {
+export async function getProjectRows(): Promise<Array<PageObjectResponse>> {
 	const dbQueryResponse = await notion.databases.query({
 		database_id: '0e8541767ed14a42a56730e7541ee028'
 	});
-	const dbPages = dbQueryResponse.results.filter(
+	return dbQueryResponse.results.filter(
 		(row) => row as PageObjectResponse
 	) as Array<PageObjectResponse>;
-	const projectRows = getProjectRowsViewModel(dbPages);
-	return projectRows;
+	// const projectRows = getProjectRowsViewModel(dbPages);
+	// return projectRows;
 }
 
-function getProjectRowsViewModel(rows: Array<PageObjectResponse>): Array<ProjectRow> {
-	return rows.map((row) => {
-		const projectRow = new ProjectRow();
-		projectRow.Role = getRichTextHtmlString(
-			(row as PageObjectResponse).properties.Role.rich_text as RichTextItemResponse[]
-		);
-		projectRow.Client = getRichTextHtmlString(
-			(row as PageObjectResponse).properties.Client.rich_text as RichTextItemResponse[]
-		);
-		projectRow.Achievement = getRichTextHtmlString(
-			(row as PageObjectResponse).properties['Key achievement/Learning']
-				.rich_text as RichTextItemResponse[]
-		);
-		projectRow.Description = getRichTextHtmlString(
-			(row as PageObjectResponse).properties['Project description'].title as RichTextItemResponse[]
-		);
-		return projectRow;
-	});
-}
+// function getProjectRowsViewModel(rows: Array<PageObjectResponse>): Array<ProjectRow> {
+// 	return rows.map((row) => {
+// 		const projectRow = new ProjectRow();
+// 		projectRow.Role = getRichTextHtmlString(
+// 			(row as PageObjectResponse).properties.Role.rich_text as RichTextItemResponse[]
+// 		);
+// 		projectRow.Client = getRichTextHtmlString(
+// 			(row as PageObjectResponse).properties.Client.rich_text as RichTextItemResponse[]
+// 		);
+// 		projectRow.Achievement = getRichTextHtmlString(
+// 			(row as PageObjectResponse).properties['Key achievement/Learning']
+// 				.rich_text as RichTextItemResponse[]
+// 		);
+// 		projectRow.Description = getRichTextHtmlString(
+// 			(row as PageObjectResponse).properties['Project description'].title as RichTextItemResponse[]
+// 		);
+// 		return projectRow;
+// 	});
+// }
 
 export async function getPageContent(title: string): Promise<ListBlockChildrenResponse> {
-	const page = await searchForPage(title);
+	const page = await await notion.search({ query: title });
 	return await getChildBlocks(page.results[0].id);
 }
 
