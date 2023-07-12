@@ -5,4 +5,4 @@
 	export let content = '';
 </script>
 
-<ul class="list-disc pl-4 pt-1"><li>{@html content}</li></ul>
+<h1 class="text-2xl pt-8 font-extrabold">{@html content}</h1>

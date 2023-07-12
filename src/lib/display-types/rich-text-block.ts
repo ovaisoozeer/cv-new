@@ -1,6 +1,6 @@
 export class RichTextBlock {
 	blockType!: RichTextBlockType;
-	richTextHtmlString?: string;
+	richTextHtmlString!: string;
 	imageUrl?: string;
 }
 

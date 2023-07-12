@@ -1,9 +1,11 @@
 <script>
+	import Title from 'components/title.svelte';
+
 	export let data;
 </script>
 
+<Title content="Projects (outside NDA)" />
 <table class="table-auto border-solid border-spacing-0 mt-4 mb-4">
-	<caption class="caption-top">Projects (outside NDA)</caption>
 	<thead class="">
 		<tr>
 			<th class="border-2">Solution</th>
