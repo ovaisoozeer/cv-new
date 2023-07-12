@@ -1,16 +1,11 @@
-import { getArticleRows } from '$lib/notion-client-wrapper';
+import { getArticleListByMaturity } from '$lib/notion-client-wrapper';
 import { json } from '@sveltejs/kit';
-import { env } from '$env/dynamic/private';
-
-const MAX_AGE = env.MAX_AGE;
+import setApiResponseHeaders from '$lib/server/headers';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function GET({ url, setHeaders, request }) {
-	setHeaders({
-		'cache-control': 'max-age=0, s-maxage=' + (MAX_AGE || 3600)
-	});
-	const maturity = url.searchParams.get('maturity') || '';
-	const rows = await getArticleRows(maturity);
-	// console.log('rows', rows);
+	const maturity = url.searchParams.get('maturity') as string;
+	const rows = await getArticleListByMaturity(maturity);
+	setApiResponseHeaders(setHeaders);
 	return json(rows);
 }

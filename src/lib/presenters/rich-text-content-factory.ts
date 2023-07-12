@@ -8,7 +8,7 @@ import type {
 	ParagraphBlockObjectResponse,
 	RichTextItemResponse
 } from '@notionhq/client/build/src/api-endpoints';
-import { RichTextBlock, RichTextBlockType } from './display-types/rich-text-block';
+import { RichTextBlock, RichTextBlockType } from '../display-types/rich-text-block';
 
 export function getRichTextHtmlString(richTextBlocks: Array<RichTextItemResponse>): string {
 	let innerHtml = '';

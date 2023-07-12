@@ -1,5 +1,5 @@
 import { ProjectRow } from '$lib/display-types/project-row';
-import { getRichTextHtmlString } from '$lib/rich-text-content';
+import { getRichTextHtmlString } from '$lib/presenters/rich-text-content-factory';
 import type {
 	PageObjectResponse,
 	RichTextItemResponse

@@ -1,6 +1,9 @@
 import { ArticleRow } from '$lib/display-types/article-row';
 import type { RichTextBlock } from '$lib/display-types/rich-text-block';
-import { getRichTextHtmlString, getRichTextViewModel } from '$lib/rich-text-content';
+import {
+	getRichTextHtmlString,
+	getRichTextViewModel
+} from '$lib/presenters/rich-text-content-factory';
 import type {
 	ListBlockChildrenResponse,
 	PageObjectResponse

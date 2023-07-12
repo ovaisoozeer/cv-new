@@ -1,4 +1,4 @@
-import { getRichTextViewModel } from '$lib/rich-text-content';
+import { getRichTextViewModel } from '$lib/presenters/rich-text-content-factory';
 import type { ListBlockChildrenResponse } from '@notionhq/client/build/src/api-endpoints';
 import type { RichTextBlock } from '../display-types/rich-text-block';
 
