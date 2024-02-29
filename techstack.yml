@@ -2,7 +2,7 @@ repo_name: ovaisoozeer/cv-new
 report_id: 8325132ca4f2b1fdc24784b03b27b021
 version: 0.1
 repo_type: Public
-timestamp: '2024-01-05T08:29:22+00:00'
+timestamp: '2024-02-29T18:57:52+00:00'
 requested_by: ovaisoozeer
 provider: github
 branch: main
@@ -115,7 +115,7 @@ tools:
   detection_source_url: https://github.com/ovaisoozeer/cv-new
   detection_source: Repo Metadata
 - name: Prettier
-  description: 'Prettier is an opinionated code formatter. '
+  description: Prettier is an opinionated code formatter.
   website_url: https://prettier.io/
   version: 2.8.3
   license: MIT
@@ -246,3 +246,11 @@ tools:
   detection_source: package.json
   last_updated_by: Ovais Oozeer
   last_updated_on: 2023-01-31 16:18:52.000000000 Z
+  vulnerabilities:
+  - name: Vite dev server option `server.fs.deny` can be bypassed when hosted on case-insensitive
+      filesystem
+    cve_id: CVE-2024-23331
+    cve_url: https://github.com/advisories/GHSA-c24v-8rfc-w8vw
+    detected_date: Jan 20
+    severity: high
+    first_patched: 4.5.2
